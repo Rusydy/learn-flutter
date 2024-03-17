@@ -50,7 +50,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-
   var selectedIndex = 0;
 
   @override
@@ -119,9 +118,7 @@ class GeneratorPage extends StatelessWidget {
                   icon: Icon(icon),
                   label: Text('Favorite'),
                 ),
-
                 SizedBox(width: 10),
-
                 ElevatedButton(
                   onPressed: () {
                     appState.getNext();
@@ -157,9 +154,9 @@ class BigCard extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(20),
         child: Text(
-            pair.asLowerCase,
-            style: style,
-            semanticsLabel: "${pair.first} ${pair.second}",
+          pair.asLowerCase,
+          style: style,
+          semanticsLabel: "${pair.first} ${pair.second}",
         ),
       ),
     );
