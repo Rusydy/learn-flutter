@@ -94,6 +94,7 @@ class GeneratorPage extends StatelessWidget {
         : Icons.favorite_border;
 
     return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.primaryContainer,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
