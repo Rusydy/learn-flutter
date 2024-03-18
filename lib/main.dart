@@ -192,15 +192,20 @@ class FavoritesPage extends StatelessWidget {
   Widget build(BuildContext context) {
     var appState = context.watch<MyAppState>();
 
+    var favoritesHistory = appState.history.entries
+        .where((entry) => entry.value == 1)
+        .map((entry) => entry.key)
+        .toList();
+
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.primaryContainer,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text('Favorites', style: Theme.of(context).textTheme.headline4),
+            Text('Favorites', style: Theme.of(context).textTheme.headlineMedium),
             SizedBox(height: 20),
-            HistoryList(history: appState.history),
+            HistoryList(history: { for (var v in favoritesHistory) v : 1 }),
           ],
         ),
       ),
