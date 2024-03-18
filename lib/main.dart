@@ -28,10 +28,10 @@ class MyApp extends StatelessWidget {
 class MyAppState extends ChangeNotifier {
   var current = WordPair.random();
   var favorites = <WordPair>[];
-  var history = <WordPair>[];
+  var history = <WordPair, int>{};
 
   void getNext() {
-    history.add(current);
+    history[current] = favorites.contains(current) ? 1 : 0;
     current = WordPair.random();
     notifyListeners();
   }
@@ -39,8 +39,10 @@ class MyAppState extends ChangeNotifier {
   void toggleFavorite() {
     if (favorites.contains(current)) {
       favorites.remove(current);
+      history[current] = 0;
     } else {
       favorites.add(current);
+      history[current] = 1;
     }
     notifyListeners();
   }
@@ -119,8 +121,6 @@ class GeneratorPage extends StatelessWidget {
         ? Icons.favorite
         : Icons.favorite_border;
 
-    var reversedHistory = appState.history.reversed.toList();
-
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.primaryContainer,
       body: Center(
@@ -149,7 +149,7 @@ class GeneratorPage extends StatelessWidget {
               ],
             ),
             SizedBox(height: 20),
-            HistoryList(reversedHistory: reversedHistory),
+            HistoryList(history: appState.history),
           ],
         ),
       ),
@@ -158,12 +158,14 @@ class GeneratorPage extends StatelessWidget {
 }
 
 class HistoryList extends StatelessWidget {
-  final List<WordPair> reversedHistory;
+  final Map<WordPair, int> history;
 
-  HistoryList({required this.reversedHistory});
+  HistoryList({required this.history});
 
   @override
   Widget build(BuildContext context) {
+    var reversedHistory = history.keys.toList().reversed.toList();
+
     return SizedBox(
       height: 200,
       width: 400,
@@ -172,7 +174,10 @@ class HistoryList extends StatelessWidget {
           itemCount: reversedHistory.length,
           itemBuilder: (context, index) {
             var historyPair = reversedHistory[index];
+            var isFavorite = history[historyPair] == 1;
             return ListTile(
+              leading:
+                  Icon(isFavorite ? Icons.favorite : Icons.favorite_border),
               title: Text(historyPair.asLowerCase),
             );
           },
