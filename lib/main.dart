@@ -28,8 +28,10 @@ class MyApp extends StatelessWidget {
 class MyAppState extends ChangeNotifier {
   var current = WordPair.random();
   var favorites = <WordPair>[];
+  var history = <WordPair>[];
 
   void getNext() {
+    history.add(current);
     current = WordPair.random();
     notifyListeners();
   }
@@ -117,6 +119,8 @@ class GeneratorPage extends StatelessWidget {
         ? Icons.favorite
         : Icons.favorite_border;
 
+    var reversedHistory = appState.history.reversed.toList();
+
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.primaryContainer,
       body: Center(
@@ -144,7 +148,34 @@ class GeneratorPage extends StatelessWidget {
                 ),
               ],
             ),
+            SizedBox(height: 20),
+            HistoryList(reversedHistory: reversedHistory),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class HistoryList extends StatelessWidget {
+  final List<WordPair> reversedHistory;
+
+  HistoryList({required this.reversedHistory});
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 200,
+      width: 400,
+      child: Card(
+        child: ListView.builder(
+          itemCount: reversedHistory.length,
+          itemBuilder: (context, index) {
+            var historyPair = reversedHistory[index];
+            return ListTile(
+              title: Text(historyPair.asLowerCase),
+            );
+          },
         ),
       ),
     );
